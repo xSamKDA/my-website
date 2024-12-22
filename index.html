@@ -1,94 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Debugging 3D Model</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-    }
-    canvas {
-      display: block;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive GLB Model</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <!-- Include Three.js library from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Include GLTFLoader from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loaders/GLTFLoader.js"></script>
 </head>
 <body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-  <script>
-    try {
-      // Scene setup
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setClearColor(0x000000); // Black background
-      document.body.appendChild(renderer.domElement);
-
-      // Lighting
-      const ambientLight = new THREE.AmbientLight(0x404040, 2);
-      scene.add(ambientLight);
-
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-      directionalLight.position.set(5, 5, 5);
-      scene.add(directionalLight);
-
-      // Add a cube for debugging
-      const geometry = new THREE.BoxGeometry();
-      const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-      const cube = new THREE.Mesh(geometry, material);
-      scene.add(cube);
-
-      // Load GLB model
-      const loader = new THREE.GLTFLoader();
-      loader.load(
-  './ps1_xenomorph.glb',
-  (gltf) => {
-    console.log('Model loaded successfully:', gltf);
-    const model = gltf.scene;
-    model.scale.set(0.5, 0.5, 0.5); // Adjust scale as needed
-    model.position.set(0, 0, 0);
-    scene.add(model);
-
-    // Rotate model for visibility
-    const animate = () => {
-      requestAnimationFrame(animate);
-      model.rotation.y += 0.01;
-      renderer.render(scene, camera);
-    };
-    animate();
-  },
-  (xhr) => {
-    console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
-  },
-  (error) => {
-    console.error('Failed to load the model:', error);
-  }
-);
-
-      // Camera position
-      camera.position.z = 10;
-
-      // Animation loop for the cube (debugging purposes)
-      const debugAnimate = () => {
-        requestAnimationFrame(debugAnimate);
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-        renderer.render(scene, camera);
-      };
-      debugAnimate();
-
-      // Window resize handler
-      window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
+    <script>
+        // Create the scene, camera, and renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-      });
-    } catch (error) {
-      console.error('An unexpected error occurred:', error);
-    }
-  </script>
+        document.body.appendChild(renderer.domElement);
+
+        // Load the GLB model
+        const loader = new THREE.GLTFLoader();
+        let model;
+        loader.load('ps1_xenomorph.glb', (gltf) => {
+            model = gltf.scene;
+            scene.add(model);
+            model.scale.set(0.5, 0.5, 0.5); // Adjust the size if needed
+            camera.position.z = 5;
+        });
+
+        // Add ambient and directional light
+        scene.add(new THREE.AmbientLight(0x404040)); // soft white light
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        // Handle window resizing
+        window.addEventListener('resize', () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+
+        // Handle mouse movement
+        document.addEventListener('mousemove', (event) => {
+            if (model) {
+                const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                model.rotation.y = mouseX * Math.PI;
+                model.rotation.x = mouseY * Math.PI;
+            }
+        });
+
+        // Render loop
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
 </body>
 </html>
