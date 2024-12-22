@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Debugging 3D Model</title>
+  <title>Xenomorph Model Animation</title>
   <style>
     body {
       margin: 0;
@@ -18,77 +18,77 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
   <script>
-    try {
-      // Scene setup
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setClearColor(0x000000); // Black background
-      document.body.appendChild(renderer.domElement);
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000); // Black background
+    document.body.appendChild(renderer.domElement);
 
-      // Lighting
-      const ambientLight = new THREE.AmbientLight(0x404040, 2);
-      scene.add(ambientLight);
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0x404040, 2);
+    scene.add(ambientLight);
 
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-      directionalLight.position.set(5, 5, 5);
-      scene.add(directionalLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+    directionalLight.position.set(5, 5, 5);
+    scene.add(directionalLight);
 
-      // Add a cube for debugging
-      const geometry = new THREE.BoxGeometry();
-      const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-      const cube = new THREE.Mesh(geometry, material);
-      scene.add(cube);
+    // Load the Xenomorph model
+    const loader = new THREE.GLTFLoader();
+    let model;
 
-      // Load GLB model
-      const loader = new THREE.GLTFLoader();
-      loader.load(
-  './xenomorph00.glb',
-  (gltf) => {
-    console.log('Model loaded successfully:', gltf);
-    const model = gltf.scene;
-    model.scale.set(0.5, 0.5, 0.5); // Adjust scale as needed
-    model.position.set(0, 0, 0);
-    scene.add(model);
+    loader.load(
+      './xenomorph-model.glb',  // Path to your local GLB file
+      (gltf) => {
+        console.log('Model loaded successfully:', gltf);
+        model = gltf.scene;
+        model.scale.set(0.5, 0.5, 0.5); // Adjust scale as needed
+        model.position.set(0, 0, 0);
+        scene.add(model);
+      },
+      (xhr) => {
+        console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
+      },
+      (error) => {
+        console.error('Failed to load the model:', error);
+        alert('Model failed to load!');
+      }
+    );
 
-    // Rotate model for visibility
+    // Mouse movement animation variables
+    let mouseX = 0;
+    let mouseY = 0;
+
+    // Listen to mouse movements to capture mouse position
+    document.addEventListener('mousemove', (event) => {
+      mouseX = (event.clientX / window.innerWidth) * 2 - 1;  // Map to [-1, 1]
+      mouseY = -(event.clientY / window.innerHeight) * 2 + 1;  // Map to [-1, 1]
+    });
+
+    // Camera position
+    camera.position.z = 5;
+
+    // Animation loop
     const animate = () => {
       requestAnimationFrame(animate);
-      model.rotation.y += 0.01;
+
+      // Rotate the model based on mouse position
+      if (model) {
+        model.rotation.y += 0.01 * mouseX;  // Rotate based on mouseX
+        model.rotation.x += 0.01 * mouseY;  // Rotate based on mouseY
+      }
+
       renderer.render(scene, camera);
     };
     animate();
-  },
-  (xhr) => {
-    console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
-  },
-  (error) => {
-    console.error('Failed to load the model:', error);
-  }
-);
 
-      // Camera position
-      camera.position.z = 10;
-
-      // Animation loop for the cube (debugging purposes)
-      const debugAnimate = () => {
-        requestAnimationFrame(debugAnimate);
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-        renderer.render(scene, camera);
-      };
-      debugAnimate();
-
-      // Window resize handler
-      window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      });
-    } catch (error) {
-      console.error('An unexpected error occurred:', error);
-    }
+    // Window resize handler
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
   </script>
 </body>
 </html>
