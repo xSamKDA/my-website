@@ -1,56 +1,22 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GLB Model Viewer</title>
-  <style>
-    body { margin: 0; }
-    canvas { display: block; }
-  </style>
+  <title>Samuel's Website</title>
+  <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js",
+            "OrbitControls": "https://unpkg.com/three@0.138.0/examples/jsm/controls/OrbitControls.js"
+        }
+    }
+  </script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loaders/GLTFLoader.js"></script>
-  
-  <script>
-    // Scene setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    // Lighting
-    const light = new THREE.AmbientLight(0xffffff, 1);
-    scene.add(light);
-
-    // GLB loader
-    const loader = new THREE.GLTFLoader();
-    const url = 'ps1_xenomorph.glb'; // Replace with the path to your GLB file
-
-    loader.load(url, function (gltf) {
-      scene.add(gltf.scene);
-    }, undefined, function (error) {
-      console.error(error);
-    });
-
-    // Camera positioning
-    camera.position.z = 5;
-
-    // Animation loop
-    function animate() {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    // Window resize handling
-    window.addEventListener('resize', function () {
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-    });
-  </script>
+  <canvas class="webgl"></canvas>
+  <script type="module" src="index.js"></script>
 </body>
 </html>
