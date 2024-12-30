@@ -1,9 +1,88 @@
-body {
-    background-color: black;
-  }
+header {
+  width: 100%;
+  text-align: center;
+  background-color: rgb(30, 30, 30);
+  color: white;
+}
 
-  h1 {
-    color: greenyellow;
-    text-align: center;
-  }
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+body {
+  background-color: rgb(40, 40, 40);
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: none;
+}
+
+body::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Edge */
+}
+
+#intro-text {
+  padding: 1rem;
+  text-align: center;
+  color:aliceblue;
+}
+
+canvas.webgl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;  
+}
+
+#model {
+  position: relative;
+  width: 100%;
+  height: 500px; /* Set a fixed height for the canvas container */
+  overflow: hidden;
+}
+
+/* Buttons Section */
+#links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 80%;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.button-link {
+  display: flex;
+  justify-content: space-evenly; /* Spaces buttons evenly across the page */
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  background-color: #007BFF;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px; /* Optional: Adds rounded corners */
+  transition: background-color 0.3s;
+}
+
+.button-link:hover {
+  background-color: #0056b3;
+}
+
+footer {
+  background-color: rgb(30, 30, 30);
+  width: 100%;
+  text-align: center;
+  color: white;
+  padding: 1rem;
+}
 

@@ -3,15 +3,15 @@ import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/
 
 const canvas = document.querySelector('.webgl');
 const scene = new THREE.Scene();
-
 const loader = new GLTFLoader();
-let xenomorph;
-loader.load('./xenomorph.glb',
+let fordGT;
+
+loader.load('./fordGT.glb',
     function (glb) {
         console.log(glb);
-        xenomorph = glb.scene;
-        xenomorph.scale.set(0.1, 0.1, 0.1);
-        scene.add(xenomorph);
+        fordGT = glb.scene;
+        fordGT.scale.set(8, 8, 8);
+        scene.add(fordGT);
     },
     function (xhr) {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
@@ -21,50 +21,64 @@ loader.load('./xenomorph.glb',
     }
 );
 
-// Fix: Correct light declaration
+// Add a background texture
+const textureLoader = new THREE.TextureLoader();
+const backgroundTexture = textureLoader.load('./background.jpg'); // Path to your image file
+scene.background = backgroundTexture;
+
 const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(2, 2, 5);
+light.position.set(1, 1, 1);
+light.castShadow = true;
 scene.add(light);
 
-// Set fixed canvas size
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); // Soft ambient light
+scene.add(ambientLight);
+
 const sizes = {
-    width: 800,  // Fixed width
-    height: 600  // Fixed height
+    width: window.innerWidth,
+    height: window.innerHeight
 };
 
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
-camera.position.set(0, 1, 2);
+// Initial camera position
+const camera = new THREE.PerspectiveCamera(100, sizes.width / sizes.height, 1, 50);
 scene.add(camera);
 
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
 });
+
 renderer.setSize(sizes.width, sizes.height);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1));
 
-// Track the mouse position
-const mouse = { x: 0, y: 0 };
-window.addEventListener('mousemove', (event) => {
-    mouse.x = (event.clientX / sizes.width) * 2 - 1;
-    mouse.y = -(event.clientY / sizes.height) * 2 + 1;
+// Variables for rotation
+const radius = 25;  // Distance from the dog (radius of the circle)
+let angle = 5;      // Angle for rotation (starting from 0 degrees)
+const rotationSpeed = 0.005;  // Speed of rotation in radians per frame
+
+// Position of the dog (which we will use as the center of rotation)
+const carPosition = new THREE.Vector3(0, -5, 0);
+
+window.addEventListener('resize', () => {
+    sizes.width = canvas.parentElement.offsetWidth;
+    sizes.height = canvas.parentElement.offsetHeight;
+    renderer.setSize(sizes.width, sizes.height);
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
 });
-
-// Function to update camera's look at position
-function updateCamera() {
-    // Always set the camera to look at the Xenomorph position (center of the scene)
-    camera.lookAt(xenomorph.position);
-}
 
 function animate() {
     requestAnimationFrame(animate);
 
-    // Update Xenomorph's rotation to follow the mouse
-    if (xenomorph) {
-        xenomorph.rotation.y = mouse.x * Math.PI; // Rotate around the Y-axis based on mouse x
-        xenomorph.rotation.x = -mouse.y * Math.PI; // Rotate around the X-axis based on mouse y
-    }
+    // Increment the angle for rotation
+    angle += rotationSpeed;
 
-    updateCamera(); // Ensure the camera always looks at the center (Xenomorph)
+    // Update the camera position to rotate around the dog
+    camera.position.x = carPosition.x + radius * Math.cos(angle);
+    camera.position.y = 10;
+    camera.position.z = carPosition.z + radius * Math.sin(angle);
+
+    // Look at the dog to keep it centered
+    camera.lookAt(carPosition);
 
     renderer.render(scene, camera);
 }
