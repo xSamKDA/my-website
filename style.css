@@ -1,19 +1,53 @@
-header {
+@import url('https://fonts.googleapis.com/css2?family=Aguafina+Script&display=swap');
+
+.text-wrapper {
+  position: relative; 
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh; 
   width: 100%;
-  text-align: center;
-  background-color: rgb(30, 30, 30);
-  color: white;
+  background-color: black;
+  padding-bottom: 300px;
 }
+
+.neon-text {
+  font-family: 'Aguafina Script', cursive;
+  font-size: 8rem;
+  letter-spacing: 4px;
+  position: absolute;
+  white-space: nowrap; 
+}
+
+.neon-bottom {
+  color: transparent;
+  -webkit-text-stroke: 2px #0000ff;
+  animation: flicker 1.5s infinite alternate;
+}
+
+.neon-top {
+  color: transparent; 
+  -webkit-text-stroke: 1px white; 
+  text-shadow: none; 
+  z-index: 2;
+  opacity: 0.8;
+}
+
+@keyframes flicker {
+  0% { opacity: 1; text-shadow: 0 0 40px #0000ff, 0 0 80px #0000ff, 0 0 160px #0080ff; }
+  50% { opacity: 0.7; text-shadow: 0 0 20px #0000ff, 0 0 60px #0000ff, 0 0 120px #0080ff; }
+  100% { opacity: 1; text-shadow: 0 0 40px #0000ff, 0 0 80px #0000ff, 0 0 160px #0080ff; }
+}
+
 
 main {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 100%;
 }
 
 body {
-  background-color: rgb(40, 40, 40);
+  background-color: black;
   margin: 0;
   font-family: Arial, sans-serif;
   display: flex;
@@ -26,10 +60,73 @@ body::-webkit-scrollbar {
   display: none; /* For Chrome, Safari, and Edge */
 }
 
-#intro-text {
+#grid-title {
   padding: 1rem;
   text-align: center;
-  color:aliceblue;
+  color:white;
+}
+
+#cert-grid { 
+  display: grid;
+  grid-template-columns: 1fr; /* One item per row */
+  gap: 20px; /* Adds spacing between grid items */
+  padding-bottom: 300px;
+  width: 95vw; /* Ensures the grid items are slightly smaller than the max screen width */
+  margin: 0 auto; /* Centers the grid on the page */
+  /* Removed justify-items: center to allow left alignment */
+}
+
+.cert-item {
+  display: flex; /* Aligns all items (image, title, description, button) in a row */
+  flex-direction: row; /* Align items horizontally */
+  justify-content: flex-start; /* Align items to the left */
+  align-items: flex-start; /* Align content within each item to the left */
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  width: 100%; /* Ensures the item takes up the full width of the grid */
+  max-width: 95vw; /* Makes the item slightly smaller than the screen width */
+}
+
+.cert-image {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+}
+
+.cert-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  text-align: left; /* Align title to the left */
+}
+
+.cert-description {
+  font-size: 1rem;
+  color: #666;
+  text-align: left; /* Align description to the left */
+}
+
+.button-link {
+  display: flex;
+  justify-content: space-evenly; /* Spaces buttons evenly across the page */
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid white;
+  border-radius: 8px; /* Optional: Adds rounded corners */
+  transition: background-color 0.3s;
+}
+
+.button-link:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  transform: scale(1.05); /* Slight scale-up effect */
 }
 
 canvas.webgl {
@@ -44,42 +141,13 @@ canvas.webgl {
 #model {
   position: relative;
   width: 100%;
-  height: 500px; /* Set a fixed height for the canvas container */
+  height: 500px; 
   overflow: hidden;
 }
 
-/* Buttons Section */
-#links {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  width: 80%;
-  max-width: 400px;
-  margin: 20px auto;
-}
-
-.button-link {
-  display: flex;
-  justify-content: space-evenly; /* Spaces buttons evenly across the page */
-  align-items: center;
-  text-decoration: none;
-  color: white;
-  background-color: #007BFF;
-  width: 100px;
-  height: 100px;
-  text-align: center;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px; /* Optional: Adds rounded corners */
-  transition: background-color 0.3s;
-}
-
-.button-link:hover {
-  background-color: #0056b3;
-}
 
 footer {
-  background-color: rgb(30, 30, 30);
+  background-color: black;
   width: 100%;
   text-align: center;
   color: white;

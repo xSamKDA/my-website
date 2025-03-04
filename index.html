@@ -16,34 +16,47 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Navigation Bar -->
   <header>
-    <h1>Samuel's Website</h1>
-  </header>
-
-  <!-- Main Content -->
+    <div class="text-wrapper">
+        <span class="neon-text neon-bottom">Samuel's Website</span>
+        <span class="neon-text neon-top">Samuel's Website</span>
+    </div>
+</header>
   <main>
-    <!-- Text Section -->
-    <section id="intro-text">
-      <p>Text Text</p>
+    <section id="grid-title">
+      <h2>Cybersecurity / Information Technology Certifications</h2> <!-- This is the text above the grid -->
+      <p>Text</p>
+    </section>
+    <section id="cert-grid">
+      <!-- COMPTIA A+ -->
+      <div class="cert-item">
+        <img src="https://cyberbrainacademy.com/wp-content/uploads/2024/03/Untitled-design-4-300x300.png" alt="Certification Image" class="cert-image">
+        <div>
+          <h3 class="cert-title">COMPTIA A+ (In Progess)</h3>
+          <p class="cert-description">Certification in Progress</p>
+        </div>
+        <a href="https://my.isc2.org/s/MemberVerification" class="button-link" target="_blank">View Certification</a> 
+      </div>
+      <!-- Certified in Cybersecurity -->
+      <div class="cert-item">
+        <img src="https://images.credly.com/images/2030e43f-8003-4d4b-9630-847add403c87/twitter_thumb_201604_image.png" alt="Certification Image" class="cert-image">
+        <div>
+          <h3 class="cert-title">ISC2 Certified in Cybersecurity (CC)</h3>
+          <p class="cert-description">Certified knowledge in Access Controls, Business Continuity, Disaster Recovery, Incident Response, Network Security, Security Operations, and Security Principles. <br> Last Name: Strbik | ISC2 ID Number: 2346349</p>
+        </div>
+        <a href="https://my.isc2.org/s/MemberVerification" class="button-link" target="_blank">View Certification</a> 
+      </div>
     </section>
 
     <!-- FordGT Model -->
     <section id="model">
       <canvas class="webgl"></canvas>
     </section>
-
-    <!-- Buttons -->
-    <section id="links">
-      <a href="https://www.linkedin.com/in/samuel-strbik-4608a324a/" class="button-link">LinkedIn</a>
-      <a href="https://letterboxd.com/xSamKDA/" class="button-link">Letterboxd</a>
-      <a href="https://psnprofiles.com/xSamKDA" class="button-link">PSNProfiles</a>
-    </section>
   </main>
 
   <!-- Footer -->
   <footer>
-    <p>Text</p>
+    
   </footer>
 </body>
 </html>
